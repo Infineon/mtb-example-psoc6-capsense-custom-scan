@@ -1,8 +1,8 @@
 # PSoC 6 MCU: CapSense Custom Scan
 
-This code example demonstrates CapSense® custom scanning through CapSense Middleware's callback functions that allow altering the sensor parameters during runtime or synchronizing the CapSense scan with non-CapSense operations.
+This code example demonstrates CapSense® custom scanning through callback functions from CapSense middleware that allow altering the sensor parameters during runtime or synchronizing the CapSense scan with non-CapSense operations.
 
-Custom scanning of CapSense sensors might be required for some very specific applications such as:
+Custom scanning of CapSense sensors may be required for some very specific applications such as the following:
 
 1. Changing the inactive sensor connection based on the sensor being currently scanned
 
@@ -12,7 +12,7 @@ Custom scanning of CapSense sensors might be required for some very specific app
 
 The CapSense middleware offers a lot of flexibility in scanning the sensors. In this code example, the callback function is used to change the inactive sensor state to either shield or ground depending on the sensor being scanned. This provides liquid tolerance and reduced parasitic capacitance of the sensor as well as the shield. It also decreases emissions because the area driven by shield signal is reduced. 
 
-This code example can be extended to many more scenarios. Some examples include
+This code example can be extended to many more scenarios. Some examples include the following:
 
 1. Tuning each sensor of a widget separately so that the gain/sensitivity can be configured. 
 
@@ -24,17 +24,27 @@ This code example can be extended to many more scenarios. Some examples include
 
 ## Requirements
 
-- [ModusToolbox™ software](https://www.cypress.com/products/modustoolbox-software-environment) v2.1
+- [ModusToolbox® software](https://www.cypress.com/products/modustoolbox-software-environment) v2.2  
+
+    **Note:** This code example version requires ModusToolbox software version 2.2 or later and is not backward compatible with v2.1 or older versions. If you cannot move to ModusToolbox v2.2, use the latest compatible version of this example: [latest-v1.X](https://github.com/cypresssemiconductorco/mtb-example-psoc6-capsense-custom-scan/tree/latest-v1.X).  
+- Board Support Package (BSP) minimum required version: 2.0.0 
 - Programming Language: C
 - Associated Parts: All [PSoC® 6 MCU](http://www.cypress.com/PSoC6) parts
 
-## Supported Kits
+## Supported Toolchains (make variable 'TOOLCHAIN')
 
-- [PSoC 6 Wi-Fi BT Prototyping Kit](https://www.cypress.com/CY8CPROTO-062-4343W) (CY8CPROTO-062-4343W) - Default target
+- GNU Arm® Embedded Compiler v9.3.1 (GCC_ARM) - Default value of `TOOLCHAIN`
+- Arm compiler v6.11 (ARM)
+- IAR C/C++ compiler v8.42.2 (IAR)
+
+## Supported Kits (make variable 'TARGET')
+
+- [PSoC 6 Wi-Fi BT Prototyping Kit](https://www.cypress.com/CY8CPROTO-062-4343W) (CY8CPROTO-062-4343W) - Default value of `TARGET`
 - [PSoC 6 WiFi-BT Pioneer Kit](https://www.cypress.com/CY8CKIT-062-WiFi-BT) (CY8CKIT-062-WIFI-BT)
 - [PSoC 6 BLE Pioneer Kit](https://www.cypress.com/CY8CKIT-062-BLE) (CY8CKIT-062-BLE)
 - [PSoC 62S2 Wi-Fi BT Pioneer Kit](https://www.cypress.com/CY8CKIT-062S2-43012) (CY8CKIT-062S2-43012)
 - [PSoC 62S3 Wi-Fi BT Prototyping Kit](https://www.cypress.com/CY8CPROTO-062S3-4343W) (CY8CPROTO-062S3-4343W)
+- [PSoC 64 Secure Boot Wi-Fi BT Pioneer Kit](http://www.cypress.com/CY8CKIT-064B0S2-4343W) (CY8CKIT-064B0S2-4343W)
 
 ## Hardware Setup
 
@@ -42,7 +52,7 @@ This example uses the board's default configuration. See the kit user guide to e
 
 An oscilloscope is required to observe the waveform at the slider segment.
 
-**Note**: The PSoC 6 BLE Pioneer Kit and the PSoC 6 WiFi-BT Pioneer Kit ship with KitProg2 installed. ModusToolbox software requires KitProg3. Before using this code example, make sure that the board is upgraded to KitProg3. The tool and instructions are available in the [Firmware Loader](https://github.com/cypresssemiconductorco/Firmware-loader) GitHub repository. If you do not upgrade, you will see an error like "unable to find CMSIS-DAP device" or "KitProg firmware is out of date".
+**Note:** The PSoC 6 BLE Pioneer Kit (CY8CKIT-062-BLE) and the PSoC 6 WiFi-BT Pioneer Kit (CY8CKIT-062-WIFI-BT) ship with KitProg2 installed. The ModusToolbox software requires KitProg3. Before using this code example, make sure that the board is upgraded to KitProg3. The tool and instructions are available in the [Firmware Loader](https://github.com/cypresssemiconductorco/Firmware-loader) GitHub repository. If you do not upgrade, you will see an error like "unable to find CMSIS-DAP device" or "KitProg firmware is out of date".
 
 ## Software Setup
 
@@ -52,45 +62,54 @@ This example requires no additional software or tools.
 
 ### In Eclipse IDE for ModusToolbox:
 
-1. Click the **New Application** link in the Quick Panel (or, use **File** > **New** > **ModusToolbox Application**).
+1. Click the **New Application** link in the **Quick Panel** (or, use **File** > **New** > **ModusToolbox Application**). This launches the [Project Creator](http://www.cypress.com/ModusToolboxProjectCreator) tool.
 
 2. Pick a kit supported by the code example from the list shown in the **Project Creator - Choose Board Support Package (BSP)** dialog.
 
-   When you select a supported kit, the example is reconfigured automatically to work with the kit. To work with a different supported kit later, use the **Library Manager** to choose the BSP for the supported kit. You can use the Library Manager to select or update the BSP and firmware libraries used in this application. 
-   
-   To access the Library Manager, right-click the application name from the Project Workspace window in the IDE, and select **ModusToolbox** > **Library Manager** (or select it from the **Quick Panel**).
+   When you select a supported kit, the example is reconfigured automatically to work with the kit. To work with a different supported kit later, use the [Library Manager](https://www.cypress.com/ModusToolboxLibraryManager) to choose the BSP for the supported kit. You can use the Library Manager to select or update the BSP and firmware libraries used in this application. To access the Library Manager, click the link from the Quick Panel. 
 
    You can also just start the application creation process again and select a different kit.
 
    If you want to use the application for a kit not listed here, you may need to update the source files. If the kit does not have the required resources, the application may not work.
 
-3. In the **Project Creator - Select Application** dialog, choose the example.
+3. In the **Project Creator - Select Application** dialog, choose the example by enabling the checkbox.
 
-4. Optionally, update the **Application Name** and **Location** fields with the application name and local path where the application is created.
+4. Optionally, change the suggested **New Application Name**.
 
-5. Click **Create** to complete the application creation process.
+5. Enter the local path in the **Application(s) Root Path** field to indicate where the application needs to be created. 
 
-For more details, see the Eclipse IDE for ModusToolbox User Guide: *{ModusToolbox install directory}/ide_{version}/docs/mt_ide_user_guide.pdf*.
+   Applications that can share libraries can be placed in the same root path.
+
+6. Click **Create** to complete the application creation process.
+
+For more details, see the [Eclipse IDE for ModusToolbox User Guide](https://www.cypress.com/MTBEclipseIDEUserGuide) (locally available at *{ModusToolbox install directory}/ide_{version}/docs/mt_ide_user_guide.pdf*).
 
 ### In Command-line Interface (CLI):
+ModusToolbox provides the Project Creator as both a GUI tool and a command line tool to easily create one or more ModusToolbox applications. See the "Project Creator Tools" section of the [ModusToolbox User Guide](https://www.cypress.com/ModusToolboxUserGuide) for more details.
+
+Alternatively, you can manually create the application using the following steps.
 
 1. Download and unzip this repository onto your local machine, or clone the repository.
 
-2. Open a CLI terminal and navigate to the application folder. 
+2. Open a CLI terminal and navigate to the application folder.
 
-On Linux and macOS, you can use any terminal application. On Windows, navigate to the modus-shell directory (*{ModusToolbox install directory}/tools_\<version>/modus-shell*) and run *Cygwin.bat*.
+   On Linux and macOS, you can use any terminal application. On Windows, open the **modus-shell** app from the Start menu.
+
+   **Note:** The cloned application contains a default BSP file (*TARGET_xxx.mtb*) in the *deps* folder. Use the [Library Manager](https://www.cypress.com/ModusToolboxLibraryManager) (`make modlibs` command) to select and download a different BSP file, if required. If the selected kit does not have the required resources or is not [supported](#supported-kits-make-variable-target), the application may not work. 
 
 3. Import the required libraries by executing the `make getlibs` command.
 
+Various CLI tools include a `-h` option that prints help information to the terminal screen about that tool. For more details, see the [ModusToolbox User Guide](https://www.cypress.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox install directory}/docs_{version}/mtb_user_guide.pdf*).
+
 ### In Third-party IDEs:
 
-1. Follow the instructions from the [CLI](#in-command-line-interface-cli) section to download or clone the repository, and import the libraries using the `make getlibs` command.
+1. Follow the instructions from the [CLI](#in-command-line-interface-cli) section to create the application, and import the libraries using the `make getlibs` command.
 
-2. Export the application to a supported IDE using the `make <ide>` command.
+2. Export the application to a supported IDE using the `make <ide>` command. 
+
+    For a list of supported IDEs and more details, see the "Exporting to IDEs" section of the [ModusToolbox User Guide](https://www.cypress.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox install directory}/docs_{version}/mtb_user_guide.pdf*.
 
 3. Follow the instructions displayed in the terminal to create or import the application as an IDE project.
-
-For more details, see the "Exporting to IDEs" section of the ModusToolbox User Guide: *{ModusToolbox install directory}/ide_{version}/docs/mtb_user_guide.pdf*.
 
 ## Operation
 
@@ -98,13 +117,13 @@ For more details, see the "Exporting to IDEs" section of the ModusToolbox User G
 
 2. Program the board.
 
-   - **Using Eclipse IDE for ModusToolbox**:
+   - **Using Eclipse IDE for ModusToolbox:**
 
       1. Select the application project in the Project Explorer.
 
-      2. In the **Quick Panel**, scroll down, and click **\<Application Name> Program (KitProg3)**.  
+      2. In the **Quick Panel**, scroll down, and click **\<Application Name> Program (KitProg3_MiniProg4)**.
 
-   - **Using CLI**:
+   - **Using CLI:**
 
      From the terminal, execute the `make program` command to build and program the application using the default toolchain to the default target. You can specify a target and toolchain manually:
       ```
@@ -116,14 +135,14 @@ For more details, see the "Exporting to IDEs" section of the ModusToolbox User G
       make program TARGET=CY8CPROTO-062-4343W TOOLCHAIN=GCC_ARM
       ```
 
-      **Note**:  Before building the application, ensure that the *deps* folder contains the BSP file (*TARGET_xxx.lib*) corresponding to the TARGET. Execute the `make getlibs` command to fetch the BSP contents before building the application.  
+      **Note:** Before building the application, ensure that the *deps* folder contains the BSP file (*TARGET_xxx.lib*) corresponding to the `TARGET`. Execute the `make getlibs` command to fetch the BSP contents before building the application.  
       
    After programming, the application starts automatically. 
 
 3. Slide your finger over the CapSense linear slider and observe that the brightness of the LED changes based on the position of the finger.
 
 4. Observe the charging and discharging waveform of the sensors in an oscilloscope by probing the sensor pins before the series resistor. 
-   Note that only neighboring sensors to the sensor being scanned are switched with the shield waveform, while other sensors are at ground potential (see [Oscilloscope Waveform](#oscilloscope-waveform)).
+   Note that only neighboring sensors to the sensor being scanned are switched with the shield waveform, while other sensors are at ground potential (see [Oscilloscope Waveforms](#oscilloscope-waveforms)).
 
 For monitoring CapSense data, CapSense parameter tuning, and SNR measurement, see [CapSense Tuner Guide](https://www.cypress.com/ModusToolboxCapSenseTuner). 
 
@@ -131,16 +150,18 @@ See [AN85951 – PSoC 4 and PSoC 6 MCU CapSense Design Guide](https://www.cypres
 
 Note that the CapSense parameters must be tuned while running this code example. Tuning the parameters with the default CapSense implementation will result in different parasitic capacitance of sensor and shield, which will give different tuning results.
 
-### Oscilloscope Waveform 
+### Oscilloscope Waveforms 
 
-Figure 1 shows the oscilloscope waveform of four sensors in the default scanning implementation. Note that all inactive sensors are always driven to shield. Therefore, there is always a switching signal on all the slider elements for the entire scan duration. Because the area driven to shield is larger, this increases the emissions produced by CapSense. This also means that the parasitic capacitance of the shield that needs to be driven by the component is higher.
+Figure 1 shows the oscilloscope waveforms of four sensors in the default scanning implementation. Note that all inactive sensors are always driven to shield. Therefore, there is always a switching signal on all the slider elements for the entire scan duration. Because the area driven to shield is larger, this increases the emissions produced by CapSense. This also means that the parasitic capacitance of the shield that needs to be driven by the component is higher.
 
-**Figure 1. Sensor Waveforms - Default implementation**
+**Figure 1. Sensor Waveforms - Default Implementation**
+
 ![Figure 1](images/sensor_waveform_default.png)
 
-Figure 2 shows the oscilloscope waveform of four sensors of the linear slider widget with the custom scanning implemented. Note that whenever a sensor is scanned, only the adjacent sensors are driven to shield. All other sensors are connected to ground, thereby reducing the total area of emission.
+Figure 2 shows the oscilloscope waveforms of four sensors of the linear slider widget with the custom scanning implemented. Note that whenever a sensor is scanned, only the adjacent sensors are driven to shield. All other sensors are connected to ground, thereby reducing the total area of emission.
 
 **Figure 2. Sensor Waveforms - Custom Implementation**
+
 ![Figure 2](images/sensor_waveform_custom.png)
 
 a. Sns0 is being scanned, and Sns1 is being driven to shield. All other sensors are connected to ground.
@@ -153,19 +174,21 @@ d. Sns3 is being scanned, and Sns2 and Sns4 (not shown in Figure 2 are driven to
 
 ## Debugging
 
-You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (KitProg3)** configuration in the **Quick Panel**. For more details, see the "Program and Debug" section in the Eclipse IDE for ModusToolbox User Guide: *{ModusToolbox install directory}/ide_{version}/docs/mt_ide_user_guide.pdf*.
+You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (KitProg3_MiniProg4)** configuration in the **Quick Panel**. For more details, see the "Program and Debug" section in the [Eclipse IDE for ModusToolbox User Guide](https://www.cypress.com/MTBEclipseIDEUserGuide).
+
+**Note:** **(Only while debugging)** On the CM4 CPU, some code in `main()` may execute before the debugger halts at the beginning of `main()`. This means that some code executes twice - once before the debugger stops execution, and again after the debugger resets the program counter to the beginning of `main()`. See [KBA231071](https://community.cypress.com/docs/DOC-21143) to learn about this and for the workaround.
 
 ## Design and Implementation
 
-In this project, PSoC 6 MCU scans a self-capacitance (CSD)-based, 5-element CapSense slider with a custom shield implementation. In the default setting, all inactive sensors of the slider are connected to shield when a sensor is scanned. In this code example, the `CY_CAPSENSE_START_SAMPLE_E` callback of the CapSense Middleware is registered using `Cy_CapSense_RegisterCallback`. This function is called at the beginning of a sensor scan. The function then loops through all the sensors in the widget. 
+In this project, PSoC 6 MCU scans a self-capacitance (CSD)-based, 5-element CapSense slider with a custom shield implementation. In the default setting, all inactive sensors of the slider are connected to shield when a sensor is scanned. In this code example, the `CY_CAPSENSE_START_SAMPLE_E` callback of the CapSense middleware is registered using `Cy_CapSense_RegisterCallback`. This function is called at the beginning of a sensor scan. The function then loops through all the sensors in the widget. 
 
 If the sensor is found to be adjacent to the sensor being scanned (obtained as a parameter), the pin state is set to shield; if not, the pin state is set to ground.
 This is done using the `Cy_CapSense_SetPinState` API function. This takes the widget ID, sensor ID, the state of the pin (`CY_CAPSENSE_SHIELD` or `CY_CAPSENSE_GROUND`, in this case) and the pointer to the CapSense context structure as parameters and sets up the status accordingly.
 
 Figure 3 and Figure 4 show the difference between normal scanning and custom scanning with respect to slider segments. The segment shown in red is the actual sensor being scanned, while segments in yellow show sensors driven to shield. Segments in green are sensors that are connected to ground.
 
- **Figure 3. Normal Scanning of Slider**    | **Figure 4. Custom Scanning of Slider**
-:-------------------------:|:-------------------------:
+ **Figure 3. Normal Scanning of the Slider**    | **Figure 4. Custom Scanning of the Slider**
+:-------------------------|:-------------------------
 ![Figure 3](images/normal_scanning_of_slider.png)  | ![Figure 4](images/custom_scanning_of_slider.png)
 
 ### Resources and Settings
@@ -185,6 +208,8 @@ Figure 3 and Figure 4 show the difference between normal scanning and custom sca
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
 | [AN228571](https://www.cypress.com/AN228571) – Getting Started with PSoC 6 MCU on ModusToolbox | Describes PSoC 6 MCU devices and how to build your first application with ModusToolbox |
 | [AN221774](https://www.cypress.com/AN221774) – Getting Started with PSoC 6 MCU on PSoC Creator | Describes PSoC 6 MCU devices and how to build your first application with PSoC Creator |
+| [AN210781](https://www.cypress.com/AN210781) – Getting Started with PSoC 6 MCU with Bluetooth Low Energy (BLE) Connectivity on PSoC Creator | Describes PSoC 6 MCU with BLE Connectivity devices and how to build your first application with PSoC Creator |
+| [AN215656](https://www.cypress.com/AN215656) – PSoC 6 MCU: Dual-CPU System Design | Describes the dual-CPU architecture in PSoC 6 MCU, and shows how to build a simple dual-CPU design |
 | [AN64846](https://www.cypress.com/AN64846) – Getting Started with CapSense | An ideal starting point for those new to capacitive touch sensing (CapSense®) |
 | [AN85951](https://www.cypress.com/AN85951) – PSoC® 4 and PSoC® 6 MCU CapSense® Design Guide  | Describes how to design capacitive touch sensing applications with the PSoC 6 families of devices |
 | **Code Examples**                                            |                                                              |
@@ -194,16 +219,17 @@ Figure 3 and Figure 4 show the difference between normal scanning and custom sca
 | **Development Kits**                                         | Buy at www.cypress.com                                       |
 | [CY8CKIT-062-BLE](https://www.cypress.com/CY8CKIT-062-BLE) PSoC 6 BLE Pioneer Kit | [CY8CKIT-062-WiFi-BT](https://www.cypress.com/CY8CKIT-062-WiFi-BT) PSoC 6 WiFi-BT Pioneer Kit |
 | [CY8CPROTO-063-BLE](https://www.cypress.com/CY8CPROTO-063-BLE) PSoC 6 BLE Prototyping Kit | [CY8CPROTO-062-4343W](https://www.cypress.com/CY8CPROTO-062-4343W) PSoC 6 Wi-Fi BT Prototyping Kit |
-| [CY8CKIT-062S2-43012](https://www.cypress.com/CY8CKIT-062S2-43012) PSoC 62S2 Wi-Fi BT Pioneer Kit | [CY8CPROTO-062S3-4343W](https://www.cypress.com/CY8CPROTO-062S3-4343W) PSoC 62S3 Wi-Fi BT Prototyping Kit |                                                       |
+| [CY8CKIT-062S2-43012](https://www.cypress.com/CY8CKIT-062S2-43012) PSoC 62S2 Wi-Fi BT Pioneer Kit | [CY8CPROTO-062S3-4343W](https://www.cypress.com/CY8CPROTO-062S3-4343W) PSoC 62S3 Wi-Fi BT Prototyping Kit |       
+|[CY8CKIT-064B0S2-4343W](http://www.cypress.com/CY8CKIT-064B0S2-4343W) PSoC 64 Secure Boot Wi-Fi BT Pioneer Kit|  |                                                              |
 | **Libraries**                                                 |                                                              |
-| PSoC 6 Peripheral Driver Library (PDL) and docs                    | [psoc6pdl](https://github.com/cypresssemiconductorco/psoc6pdl) on GitHub |
-| Cypress Hardware Abstraction Layer (HAL) Library and docs          | [psoc6hal](https://github.com/cypresssemiconductorco/psoc6hal) on GitHub |
+| PSoC 6 Peripheral Driver Library (PDL) and docs  | [mtb-pdl-cat1](https://github.com/cypresssemiconductorco/mtb-pdl-cat1) on GitHub |
+| Cypress Hardware Abstraction Layer (HAL) Library and docs     | [mtb-hal-cat1](https://github.com/cypresssemiconductorco/mtb-hal-cat1) on GitHub |
 | **Middleware**                                               |                                                              |
-| CapSense library and docs                                    | [capsense](https://github.com/cypresssemiconductorco/capsense) on GitHub |
+| CapSense® library and docs                                    | [capsense](https://github.com/cypresssemiconductorco/capsense) on GitHub |
 | Links to all PSoC 6 MCU Middleware                           | [psoc6-middleware](https://github.com/cypresssemiconductorco/psoc6-middleware) on GitHub |
 | **Tools**                                                    |                                                              |
-| [Eclipse IDE for ModusToolbox](https://www.cypress.com/modustoolbox)     | The multi-platform, Eclipse-based Integrated Development Environment (IDE) that supports application configuration and development for PSoC 6 MCU and IoT designers.             |
-| [PSoC Creator](https://www.cypress.com/products/psoc-creator-integrated-design-environment-ide) | The Cypress IDE for PSoC and FM0+ MCU development.            |
+| [Eclipse IDE for ModusToolbox](https://www.cypress.com/modustoolbox)     | The cross-platform, Eclipse-based IDE for IoT designers that supports application configuration and development targeting converged MCU and wireless systems.             |
+| [PSoC Creator™](https://www.cypress.com/products/psoc-creator-integrated-design-environment-ide) | The Cypress IDE for PSoC and FM0+ MCU development.            |
 
 ## Other Resources
 
@@ -218,13 +244,13 @@ Document Title: *CE230163* - *PSoC 6 MCU: CapSense Custom Scan*
 | Version | Description of Change |
 | ------- | --------------------- |
 | 1.0.0   | New code example      |
-
+| 2.0.0   | Major update to support ModusToolbox software v2.2, added support for new kits<br> This version is not backward compatible with ModusToolbox software v2.1  |
 ------
 
 
 All other trademarks or registered trademarks referenced herein are the property of their respective owners.
 
-![banner](images/footer_banner.png)
+![banner](images/ifx-cy-banner.png)
 
 -------------------------------------------------------------------------------
 
