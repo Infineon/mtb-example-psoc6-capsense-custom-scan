@@ -22,6 +22,8 @@ This code example can be extended to many more scenarios. Some examples include 
 
    If there is a high-speed switching signal that affects a few sensors in the system, the firmware can turn off such sources of noise while the affected sensors are scanned. This would help with better CapSense operation while keeping all other operations as functional as possible.
 
+[Provide feedback on this Code Example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzAxNjMiLCJTcGVjIE51bWJlciI6IjAwMi0zMDE2MyIsIkRvYyBUaXRsZSI6IlBTb0MgNiBNQ1U6IENhcFNlbnNlIEN1c3RvbSBTY2FuIiwicmlkIjoiYWhhciIsIkRvYyB2ZXJzaW9uIjoiMi4xLjAiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTUNEIiwiRG9jIEJVIjoiSUNXIiwiRG9jIEZhbWlseSI6IlBTT0MifQ==)
+
 ## Requirements
 
 - [ModusToolbox® software](https://www.cypress.com/products/modustoolbox-software-environment) v2.2  
@@ -45,6 +47,9 @@ This code example can be extended to many more scenarios. Some examples include 
 - [PSoC 62S2 Wi-Fi BT Pioneer Kit](https://www.cypress.com/CY8CKIT-062S2-43012) (CY8CKIT-062S2-43012)
 - [PSoC 62S3 Wi-Fi BT Prototyping Kit](https://www.cypress.com/CY8CPROTO-062S3-4343W) (CY8CPROTO-062S3-4343W)
 - [PSoC 64 Secure Boot Wi-Fi BT Pioneer Kit](http://www.cypress.com/CY8CKIT-064B0S2-4343W) (CY8CKIT-064B0S2-4343W)
+- [PSoC 62S4 Pioneer Kit](https://www.cypress.com/CY8CKIT-062S4) (CY8CKIT-062S4)
+- [PSoC 62S1 Wi-Fi BT Pioneer Kit](https://www.cypress.com/CYW9P62S1-43438EVB-01) (CYW9P62S1-43438EVB-01)
+- [PSoC 62S1 Wi-Fi BT Pioneer Kit](https://www.cypress.com/CYW9P62S1-43012EVB-01) (CYW9P62S1-43012EVB-01)
 
 ## Hardware Setup
 
@@ -245,6 +250,7 @@ Document Title: *CE230163* - *PSoC 6 MCU: CapSense Custom Scan*
 | ------- | --------------------- |
 | 1.0.0   | New code example      |
 | 2.0.0   | Major update to support ModusToolbox software v2.2, added support for new kits<br> This version is not backward compatible with ModusToolbox software v2.1  |
+| 2.1.0   | Added support for new kits |
 ------
 
 
