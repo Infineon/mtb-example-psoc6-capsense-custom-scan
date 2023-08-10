@@ -7,7 +7,7 @@
 * Related Document: See README.md
 *
 *******************************************************************************
-* Copyright 2020-2022, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -38,17 +38,18 @@
 * of such system or application assumes all risk of such use and in doing
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
-
 #include "cybsp.h"
 #include "cyhal.h"
 #include "cycfg.h"
 #include "cycfg_capsense.h"
 #include "led.h"
 
+
 /*******************************************************************************
  * Macros
  ********************************************************************************/
 #define CAPSENSE_INTR_PRIORITY  (7u)
+
 
 /*******************************************************************************
  * Function Prototypes
@@ -58,6 +59,7 @@ static void process_touch(void);
 static void initialize_capsense_tuner(void);
 static void capsense_isr(void);
 void start_sample_callback_function(cy_stc_active_scan_sns_t * ptrActiveScan);
+
 
 /*******************************************************************************
  * Global Variables
